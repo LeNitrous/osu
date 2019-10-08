@@ -98,6 +98,12 @@ namespace osu.Game.Rulesets.Catch
                         new CatchModFlashlight(),
                     };
 
+                case ModType.Conversion:
+                    return new Mod[]
+                    {
+                        new CatchModModify(),
+                    };
+
                 case ModType.Automation:
                     return new Mod[]
                     {
