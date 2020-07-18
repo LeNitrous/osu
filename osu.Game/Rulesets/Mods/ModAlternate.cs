@@ -61,9 +61,9 @@ namespace osu.Game.Rulesets.Mods
             {
                 base.LoadComplete();
 
-                using(BeginAbsoluteSequence(0))
+                using (BeginAbsoluteSequence(0))
                 {
-                    foreach(BreakPeriod breakPeriod in mod.Breaks)
+                    foreach (BreakPeriod breakPeriod in mod.Breaks)
                     {
                         var hitObject = mod.HitObjects.First((h) => h.StartTime > breakPeriod.EndTime);
                         var window = hitObject.HitWindows.WindowFor(HitResult.Miss);

@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Taiko.Mods
         {
             Drawable interceptor = Interceptor as Drawable;
 
-            using(Interceptor.BeginAbsoluteSequence(0))
+            using (Interceptor.BeginAbsoluteSequence(0))
             {
                 foreach (TaikoHitObject hitObject in HitObjects)
                 {
