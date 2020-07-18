@@ -11,14 +11,14 @@ namespace osu.Game.Rulesets.Osu.Mods
         private OsuAction? lastActionPressed;
         private OsuAction? lastActionReleased;
 
-        protected override void OnBreakEnd()
+        protected override void ResetActionStates()
         {
             lastActionPressed = lastActionReleased = null;
         }
 
         protected override bool OnPressed(OsuAction action)
         {
-            if (lastActionPressed != null && lastActionPressed == action)
+            if (lastActionPressed == action)
                 return true;
 
             lastActionPressed = action;
@@ -27,7 +27,7 @@ namespace osu.Game.Rulesets.Osu.Mods
 
         protected override bool OnReleased(OsuAction action)
         {
-            if (lastActionReleased != null && lastActionReleased == action)
+            if (lastActionReleased == action)
                 return true;
 
             lastActionReleased = action;
