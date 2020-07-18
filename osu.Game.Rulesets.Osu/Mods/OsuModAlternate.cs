@@ -10,8 +10,8 @@ namespace osu.Game.Rulesets.Osu.Mods
 {
     public class OsuModAlternate : ModAlternate<OsuHitObject, OsuAction>
     {
-        OsuAction? lastActionPressed;
-        OsuAction? lastActionReleased;
+        private OsuAction? lastActionPressed;
+        private OsuAction? lastActionReleased;
 
         protected override void OnInterceptorLoadComplete()
         {
