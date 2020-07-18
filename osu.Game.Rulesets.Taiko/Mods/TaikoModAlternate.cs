@@ -1,9 +1,8 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using osu.Framework.Graphics;
+using System.Linq;
 using osu.Game.Rulesets.Mods;
-using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.Taiko.Objects;
 
 namespace osu.Game.Rulesets.Taiko.Mods
@@ -12,40 +11,30 @@ namespace osu.Game.Rulesets.Taiko.Mods
     {
         private TaikoAction? lastRimAction;
         private TaikoAction? lastCentreAction;
+        private TaikoHitObject nextHitObject;
 
-        protected override void OnBreakEnd()
+        protected override void ResetActionStates()
         {
-            resetStates();
+            lastCentreAction = lastRimAction = null;
         }
 
-        protected override void OnInterceptorLoadComplete()
+        protected override void OnInterceptorUpdate(double time)
         {
-            Drawable interceptor = Interceptor as Drawable;
-
-            using (Interceptor.BeginAbsoluteSequence(0))
-            {
-                foreach (TaikoHitObject hitObject in HitObjects)
-                {
-                    if (!hitObject.IsStrong) continue;
-
-                    var window = hitObject.HitWindows.WindowFor(HitResult.Miss);
-                    interceptor.Delay(hitObject.StartTime - window).Schedule(() => resetStates());
-                    interceptor.Delay(hitObject.StartTime + window).Schedule(() => resetStates());
-
-                    foreach (TaikoHitObject h in hitObject.NestedHitObjects)
-                    {
-                        interceptor.Delay(h.StartTime - 50).Schedule(() => resetStates());
-                        interceptor.Delay(h.StartTime + 50).Schedule(() => resetStates());
-                    }
-                }
-            }
+            nextHitObject = HitObjects.FirstOrDefault((h) => h.StartTime > time);
+            base.OnInterceptorUpdate(time);
         }
 
         protected override bool OnPressed(TaikoAction action)
         {
+            if (nextHitObject?.IsStrong ?? false)
+            {
+                ResetActionStates();
+                return false;
+            }
+
             if (action == TaikoAction.LeftRim || action == TaikoAction.RightRim)
             {
-                if (lastRimAction != null && lastRimAction == action)
+                if (lastRimAction == action)
                     return true;
 
                 lastRimAction = action;
@@ -54,7 +43,7 @@ namespace osu.Game.Rulesets.Taiko.Mods
 
             if (action == TaikoAction.LeftCentre || action == TaikoAction.RightCentre)
             {
-                if (lastCentreAction != null && lastCentreAction == action)
+                if (lastCentreAction == action)
                     return true;
 
                 lastCentreAction = action;
@@ -64,14 +53,6 @@ namespace osu.Game.Rulesets.Taiko.Mods
             return false;
         }
 
-        protected override bool OnReleased(TaikoAction action)
-        {
-            return false;
-        }
-
-        private void resetStates()
-        {
-            lastCentreAction = lastRimAction = null;
-        }
+        protected override bool OnReleased(TaikoAction action) => false;
     }
 }
