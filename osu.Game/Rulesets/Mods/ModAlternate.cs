@@ -1,8 +1,13 @@
+// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// See the LICENCE file in the repository root for full licence text.
+
 using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Game.Beatmaps.Timing;
 using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 
 namespace osu.Game.Rulesets.Mods
@@ -35,7 +40,11 @@ namespace osu.Game.Rulesets.Mods
 
         protected abstract bool OnReleased(TAction action);
 
-        protected abstract void OnInterceptorLoadComplete();
+        protected abstract void OnBreakEnd();
+
+        protected virtual void OnInterceptorLoadComplete()
+        {
+        }
 
         public class InputInterceptor : Drawable, IKeyBindingHandler<TAction>
         {
@@ -49,6 +58,17 @@ namespace osu.Game.Rulesets.Mods
             protected override void LoadComplete()
             {
                 base.LoadComplete();
+
+                using(BeginAbsoluteSequence(0))
+                {
+                    foreach(BreakPeriod breakPeriod in mod.Breaks)
+                    {
+                        var hitObject = mod.HitObjects.First((h) => h.StartTime > breakPeriod.EndTime);
+                        var window = hitObject.HitWindows.WindowFor(HitResult.Miss);
+                        this.Delay(hitObject.StartTime - window).Schedule(() => mod.OnBreakEnd());
+                    }
+                }
+
                 mod.OnInterceptorLoadComplete();
             }
 
