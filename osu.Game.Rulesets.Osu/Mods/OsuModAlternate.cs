@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osu.Framework.Graphics;
+using osu.Game.Beatmaps.Timing;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Osu.Objects;
 
@@ -11,6 +12,18 @@ namespace osu.Game.Rulesets.Osu.Mods
     {
         OsuAction? lastActionPressed;
         OsuAction? lastActionReleased;
+
+        protected override void OnInterceptorLoadComplete()
+        {
+            using(Interceptor.BeginAbsoluteSequence(0))
+            {
+                foreach (BreakPeriod breakPeriod in Breaks)
+                {
+                    Drawable interceptor = Interceptor as Drawable;
+                    interceptor.Delay(breakPeriod.EndTime).Schedule(() => lastActionPressed = lastActionReleased = null);
+                }
+            }
+        }
 
         protected override bool OnPressed(OsuAction action)
         {
