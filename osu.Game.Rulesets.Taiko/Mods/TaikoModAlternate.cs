@@ -12,6 +12,7 @@ namespace osu.Game.Rulesets.Taiko.Mods
         private TaikoAction? lastRimAction;
         private TaikoAction? lastCentreAction;
         private TaikoHitObject nextHitObject;
+        private bool requestNextHitObject = true;
 
         protected override void ResetActionStates()
         {
@@ -20,7 +21,12 @@ namespace osu.Game.Rulesets.Taiko.Mods
 
         protected override void OnInterceptorUpdate(double time)
         {
-            nextHitObject = HitObjects.FirstOrDefault((h) => h.StartTime > time);
+            if (requestNextHitObject)
+            {
+                nextHitObject = HitObjects.FirstOrDefault((h) => h.StartTime > time);
+                requestNextHitObject = false;
+            }
+
             base.OnInterceptorUpdate(time);
         }
 
@@ -50,6 +56,7 @@ namespace osu.Game.Rulesets.Taiko.Mods
                 return false;
             }
 
+            requestNextHitObject = true;
             return false;
         }
 
