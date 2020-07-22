@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics;
+using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Game.Beatmaps.Timing;
 using osu.Game.Rulesets.Objects;
@@ -29,15 +30,18 @@ namespace osu.Game.Rulesets.Mods
     {
         protected readonly List<double> ResetTimestamps = new List<double>();
         protected List<THitObject> HitObjects;
+        protected InputInterceptor Interceptor;
+        protected PassThroughInputManager InputManager;
         private List<BreakPeriod> breaks;
         private double nextResetTime;
-        private bool requiresResetCheck = true;
+        private bool checkForBreaks = true;
 
         public void ApplyToDrawableRuleset(DrawableRuleset<THitObject> drawableRuleset)
         {
             breaks = drawableRuleset.Beatmap.Breaks;
             HitObjects = drawableRuleset.Beatmap.HitObjects;
-            drawableRuleset.KeyBindingInputManager.Add(new InputInterceptor(this));
+            InputManager = drawableRuleset.KeyBindingInputManager;
+            InputManager.Add(Interceptor = new InputInterceptor(this));
 
             foreach (BreakPeriod period in breaks)
             {
@@ -52,7 +56,7 @@ namespace osu.Game.Rulesets.Mods
             }
             catch
             {
-                requiresResetCheck = false;
+                checkForBreaks = false;
             }
         }
 
@@ -62,9 +66,9 @@ namespace osu.Game.Rulesets.Mods
 
         protected abstract void ResetActionStates();
 
-        protected virtual void OnInterceptorUpdate(double time)
+        public void CheckBreaks(double time)
         {
-            if (requiresResetCheck && time > nextResetTime)
+            if (checkForBreaks && time > nextResetTime)
             {
                 ResetActionStates();
 
@@ -74,7 +78,7 @@ namespace osu.Game.Rulesets.Mods
                 }
                 catch
                 {
-                    requiresResetCheck = false;
+                    checkForBreaks = false;
                 }
             }
         }
@@ -95,7 +99,7 @@ namespace osu.Game.Rulesets.Mods
             protected override void Update()
             {
                 base.Update();
-                mod.OnInterceptorUpdate(Time.Current);
+                mod.CheckBreaks(Time.Current);
             }
         }
     }
