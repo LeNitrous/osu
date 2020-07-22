@@ -10,8 +10,11 @@ namespace osu.Game.Rulesets.Taiko.Mods
 {
     public class TaikoModAlternate : ModAlternate<TaikoHitObject, TaikoAction>
     {
-        private TaikoAction? lastRimAction;
-        private TaikoAction? lastCentreAction;
+        [SettingSource("Playstyle", "Preferred Alternate Playstyle")]
+        public Bindable<Playstyle> Style { get; } = new Bindable<Playstyle>();
+
+        private TaikoAction? lastAction1;
+        private TaikoAction? lastAction2;
         private TaikoAction lastAction;
         private bool lastActionState;
         private double lastActionTime = 0;
@@ -19,25 +22,44 @@ namespace osu.Game.Rulesets.Taiko.Mods
 
         protected override void ResetActionStates()
         {
-            lastCentreAction = lastRimAction = null;
+            lastAction1 = lastAction2 = null;
         }
 
         protected override bool OnPressed(TaikoAction action)
         {
             var blockInput = false;
 
-            switch (action)
+            if (Style.Value == Playstyle.KDDK)
             {
-                case TaikoAction.LeftRim:
-                case TaikoAction.RightRim:
-                    blockInput = action == lastRimAction;
-                    lastRimAction = action;
-                    break;
-                case TaikoAction.LeftCentre:
-                case TaikoAction.RightCentre:
-                    blockInput = action == lastCentreAction;
-                    lastCentreAction = action;
-                    break;
+                switch (action)
+                {
+                    case TaikoAction.LeftRim:
+                    case TaikoAction.LeftCentre:
+                        blockInput = action == lastAction1;
+                        lastAction1 = action;
+                        break;
+                    case TaikoAction.RightRim:
+                    case TaikoAction.RightCentre:
+                        blockInput = action == lastAction2;
+                        lastAction2 = action;
+                        break;
+                }
+            }
+            else
+            {
+                switch (action)
+                {
+                    case TaikoAction.LeftRim:
+                    case TaikoAction.RightRim:
+                        blockInput = action == lastAction1;
+                        lastAction1 = action;
+                        break;
+                    case TaikoAction.LeftCentre:
+                    case TaikoAction.RightCentre:
+                        blockInput = action == lastAction2;
+                        lastAction2 = action;
+                        break;
+                }
             }
 
             if (Interceptor.Time.Current - lastActionTime <= strong_hit_window)
@@ -57,5 +79,11 @@ namespace osu.Game.Rulesets.Taiko.Mods
         }
 
         protected override bool OnReleased(TaikoAction action) => false;
+
+        public enum Playstyle
+        {
+            KDDK,
+            KKDD
+        }
     }
 }
