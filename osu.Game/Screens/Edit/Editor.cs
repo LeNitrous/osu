@@ -31,6 +31,7 @@ using osu.Game.Overlays;
 using osu.Game.Overlays.Notifications;
 using osu.Game.Rulesets;
 using osu.Game.Rulesets.Edit;
+using osu.Game.Rulesets.Mods;
 using osu.Game.Screens.Edit.Components;
 using osu.Game.Screens.Edit.Components.Menus;
 using osu.Game.Screens.Edit.Components.Timelines.Summary;
@@ -910,7 +911,17 @@ namespace osu.Game.Screens.Edit
                 pushEditorPlayer();
             }
 
-            void pushEditorPlayer() => this.Push(new EditorPlayerLoader(this));
+            void pushEditorPlayer() => this.Push(new EditorPlayerLoader(createPlayer));
+
+            Player createPlayer()
+            {
+                var replayGeneratingMod = Mods.Value.OfType<ICreateReplay>().FirstOrDefault();
+
+                if (replayGeneratingMod != null)
+                    return new EditorReplayPlayer(this, (beatmap, mods) => replayGeneratingMod.CreateReplayScore(beatmap, mods));
+
+                return new EditorPlayer(this);
+            }
         }
 
         public double SnapTime(double time, double? referenceTime) => editorBeatmap.SnapTime(time, referenceTime);

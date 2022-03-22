@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -402,21 +403,15 @@ namespace osu.Game.Screens.Play
                     // display the cursor above some HUD elements.
                     DrawableRuleset.Cursor?.CreateProxy() ?? new Container(),
                     DrawableRuleset.ResumeOverlay?.CreateProxy() ?? new Container(),
-                    HUDOverlay = new HUDOverlay(DrawableRuleset, GameplayState.Mods)
+                    HUDOverlay = CreateHUDOverlay(DrawableRuleset, GameplayState.Mods).With(hud =>
                     {
-                        HoldToQuit =
-                        {
-                            Action = () => PerformExit(true),
-                            IsPaused = { BindTarget = GameplayClockContainer.IsPaused }
-                        },
-                        KeyCounter =
-                        {
-                            AlwaysVisible = { BindTarget = DrawableRuleset.HasReplayLoaded },
-                            IsCounting = false
-                        },
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre
-                    },
+                        hud.HoldToQuit.Action = () => PerformExit(true);
+                        hud.HoldToQuit.IsPaused.BindTo(GameplayClockContainer.IsPaused);
+                        hud.KeyCounter.IsCounting = false;
+                        hud.KeyCounter.AlwaysVisible.BindTo(DrawableRuleset.HasReplayLoaded);
+                        hud.Anchor = Anchor.Centre;
+                        hud.Origin = Anchor.Centre;
+                    }),
                     skipIntroOverlay = new SkipOverlay(DrawableRuleset.GameplayStartTime)
                     {
                         RequestSkip = performUserRequestedSkip
@@ -989,6 +984,8 @@ namespace osu.Game.Screens.Play
 
             GameplayClockContainer.Reset();
         }
+
+        protected virtual HUDOverlay CreateHUDOverlay(DrawableRuleset drawableRuleset, IReadOnlyList<Mod> mods) => new HUDOverlay(drawableRuleset, mods);
 
         public override void OnSuspending(IScreen next)
         {

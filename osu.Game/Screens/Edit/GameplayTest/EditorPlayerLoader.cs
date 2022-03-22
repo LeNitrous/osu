@@ -1,6 +1,7 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Screens;
@@ -14,8 +15,8 @@ namespace osu.Game.Screens.Edit.GameplayTest
         [Resolved]
         private OsuLogo osuLogo { get; set; }
 
-        public EditorPlayerLoader(Editor editor)
-            : base(() => new EditorPlayer(editor))
+        public EditorPlayerLoader(Func<Player> createPlayer)
+            : base(createPlayer)
         {
         }
 
