@@ -11,16 +11,16 @@ using osu.Game.Online.Broadcasts;
 namespace osu.Game.Tests.Online
 {
     [TestFixture]
-    public class TestSceneBroadcaster
+    public class TestSceneBroadcastServer
     {
         private ClientWebSocket client;
-        private Broadcaster server;
+        private BroadcastServer server;
 
         [SetUp]
         public void SetUp()
         {
             client = new ClientWebSocket();
-            server = new Broadcaster();
+            server = new BroadcastServer();
 
             server.Start();
             client.ConnectAsync(new Uri("ws://localhost:7270/"), CancellationToken.None).WaitSafely();

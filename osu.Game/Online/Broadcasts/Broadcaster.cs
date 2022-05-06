@@ -15,7 +15,7 @@ using osu.Framework.Graphics.Containers;
 namespace osu.Game.Online.Broadcasts
 {
     [Cached]
-    public class Broadcaster : CompositeDrawable
+    public class BroadcastServer : CompositeDrawable
     {
         public bool IsListening => listener?.IsListening ?? false;
         public int Connected => clients.Count;
