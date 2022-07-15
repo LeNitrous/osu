@@ -11,12 +11,14 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Threading;
 using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays.Settings;
+using osu.Game.Screens.Menu;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
 using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 using osu.Game.Tournament.Screens.MapPool;
 using osu.Game.Tournament.Screens.TeamWin;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Tournament.Screens.Gameplay
@@ -31,9 +33,6 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
         [Resolved(canBeNull: true)]
         private TournamentSceneManager sceneManager { get; set; }
-
-        [Resolved]
-        private TournamentMatchChatDisplay chat { get; set; }
 
         private Drawable chroma;
 
@@ -52,6 +51,14 @@ namespace osu.Game.Tournament.Screens.Gameplay
                 header = new MatchHeader
                 {
                     ShowLogo = false
+                },
+                new OsuLogo
+                {
+                    Triangles = false,
+                    Scale = new Vector2(0.1f),
+                    Margin = new MarginPadding(100),
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.BottomRight,
                 },
                 new Container
                 {
@@ -175,30 +182,9 @@ namespace osu.Game.Tournament.Screens.Gameplay
 
                 scheduledOperation?.Cancel();
 
-                void expand()
-                {
-                    chat?.Contract();
-
-                    using (BeginDelayedSequence(300))
-                    {
-                        scoreDisplay.FadeIn(100);
-                        SongBar.Expanded = true;
-                    }
-                }
-
-                void contract()
-                {
-                    SongBar.Expanded = false;
-                    scoreDisplay.FadeOut(100);
-                    using (chat?.BeginDelayedSequence(500))
-                        chat?.Expand();
-                }
-
                 switch (state.NewValue)
                 {
                     case TourneyState.Idle:
-                        contract();
-
                         const float delay_before_progression = 4000;
 
                         // if we've returned to idle and the last screen was ranking
@@ -214,12 +200,9 @@ namespace osu.Game.Tournament.Screens.Gameplay
                         break;
 
                     case TourneyState.Ranking:
-                        scheduledOperation = Scheduler.AddDelayed(contract, 10000);
                         break;
 
                     default:
-                        chat.Contract();
-                        expand();
                         break;
                 }
             }

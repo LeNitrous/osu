@@ -5,11 +5,10 @@
 
 using System.Linq;
 using NUnit.Framework;
-using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Testing;
-using osu.Game.Tournament.Components;
 using osu.Game.Tournament.IPC;
+using osu.Game.Tournament.Models;
 using osu.Game.Tournament.Screens.Gameplay;
 using osu.Game.Tournament.Screens.Gameplay.Components;
 
@@ -17,14 +16,12 @@ namespace osu.Game.Tournament.Tests.Screens
 {
     public class TestSceneGameplayScreen : TournamentTestScene
     {
-        [Cached]
-        private TournamentMatchChatDisplay chat = new TournamentMatchChatDisplay { Width = 0.5f };
-
         [Test]
         public void TestStartupState([Values] TourneyState state)
         {
             AddStep("set state", () => IPCInfo.State.Value = state);
             createScreen();
+            AddStep("set beatmap", () => IPCInfo.Beatmap.Value = new TournamentBeatmap(CreateAPIBeatmap()));
         }
 
         [Test]
@@ -53,12 +50,9 @@ namespace osu.Game.Tournament.Tests.Screens
         {
             AddStep("setup screen", () =>
             {
-                Remove(chat);
-
                 Children = new Drawable[]
                 {
                     new GameplayScreen(),
-                    chat,
                 };
             });
         }

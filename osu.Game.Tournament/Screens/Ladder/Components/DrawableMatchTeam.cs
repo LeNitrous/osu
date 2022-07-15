@@ -63,13 +63,10 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
         {
             this.match = match;
             this.losers = losers;
-            Size = new Vector2(150, 40);
-
-            Flag.Scale = new Vector2(0.54f);
-            Flag.Anchor = Flag.Origin = Anchor.CentreLeft;
+            Size = new Vector2(200, 40);
 
             AcronymText.Anchor = AcronymText.Origin = Anchor.CentreLeft;
-            AcronymText.Padding = new MarginPadding { Left = 50 };
+            AcronymText.Padding = new MarginPadding { Left = 10 };
             AcronymText.Font = OsuFont.Torus.With(size: 22, weight: FontWeight.Bold);
 
             if (match != null)
@@ -104,16 +101,15 @@ namespace osu.Game.Tournament.Screens.Ladder.Components
                     Children = new Drawable[]
                     {
                         AcronymText,
-                        Flag,
                     }
                 },
                 new Container
                 {
                     Masking = true,
-                    Width = 0.3f,
+                    Width = 50,
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
-                    RelativeSizeAxes = Axes.Both,
+                    RelativeSizeAxes = Axes.Y,
                     Children = new Drawable[]
                     {
                         backgroundRight = new Box

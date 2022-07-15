@@ -289,6 +289,7 @@ namespace osu.Game.Tournament
                 user.Username = res.Username;
                 user.CoverUrl = res.CoverUrl;
                 user.Country = res.Country;
+                user.CountryRank = res.Statistics?.CountryRank;
                 user.Rank = res.Statistics?.GlobalRank;
 
                 success?.Invoke();

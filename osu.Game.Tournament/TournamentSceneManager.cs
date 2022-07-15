@@ -100,7 +100,6 @@ namespace osu.Game.Tournament
                         chatContainer = new Container
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Child = chat
                         },
                     }
                 },

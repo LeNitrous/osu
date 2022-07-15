@@ -15,15 +15,16 @@ namespace osu.Game.Tournament.Screens
 {
     public abstract class BeatmapInfoScreen : TournamentMatchScreen
     {
-        protected readonly SongBar SongBar;
+        protected readonly NowPlayingInfo NowPlayingInfo;
 
         protected BeatmapInfoScreen()
         {
-            AddInternal(SongBar = new SongBar
+            AddInternal(NowPlayingInfo = new NowPlayingInfo
             {
-                Anchor = Anchor.BottomRight,
-                Origin = Anchor.BottomRight,
+                Anchor = Anchor.BottomCentre,
+                Origin = Anchor.BottomCentre,
                 Depth = float.MinValue,
+
             });
         }
 
@@ -36,13 +37,13 @@ namespace osu.Game.Tournament.Screens
 
         private void modsChanged(ValueChangedEvent<LegacyMods> mods)
         {
-            SongBar.Mods = mods.NewValue;
+            NowPlayingInfo.Mods = mods.NewValue;
         }
 
         private void beatmapChanged(ValueChangedEvent<TournamentBeatmap> beatmap)
         {
-            SongBar.FadeInFromZero(300, Easing.OutQuint);
-            SongBar.Beatmap = beatmap.NewValue;
+            NowPlayingInfo.FadeInFromZero(300, Easing.OutQuint);
+            NowPlayingInfo.Beatmap = beatmap.NewValue;
         }
     }
 }

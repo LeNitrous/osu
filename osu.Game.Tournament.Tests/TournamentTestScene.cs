@@ -121,11 +121,13 @@ namespace osu.Game.Tournament.Tests
                     },
                     Players =
                     {
-                        new TournamentUser { Username = "Hello", Rank = 12 },
-                        new TournamentUser { Username = "Hello", Rank = 16 },
-                        new TournamentUser { Username = "Hello", Rank = 20 },
-                        new TournamentUser { Username = "Hello", Rank = 24 },
-                        new TournamentUser { Username = "Hello", Rank = 30 },
+                        new TournamentUser
+                        {
+                            OnlineID = 5547947,
+                            Username = "Snikerdoodles",
+                            CountryRank = 204,
+                            CoverUrl = "https://assets.ppy.sh/user-profile-covers/5547947/4269dc0bf5b7172ef5356898c8fe82264a0687e7bd0f209713933376d8f2bf29.jpeg",
+                        }
                     }
                 }
             },
@@ -138,11 +140,13 @@ namespace osu.Game.Tournament.Tests
                     FullName = { Value = "United States" },
                     Players =
                     {
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
-                        new TournamentUser { Username = "Hello" },
+                        new TournamentUser
+                        {
+                            OnlineID = 7293512,
+                            Username = "Nitrous",
+                            CountryRank = 5704,
+                            CoverUrl = "https://assets.ppy.sh/user-profile-covers/7293512/c2700172f3c885cf58a9ed038f426121ce170d636c8dac99c5728bc7d357c1b2.jpeg",
+                        }
                     }
                 }
             },

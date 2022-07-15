@@ -7,8 +7,11 @@ using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Sprites;
+using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.TeamIntro.Components;
 using osuTK;
 
 namespace osu.Game.Tournament.Screens.TeamIntro
@@ -45,31 +48,36 @@ namespace osu.Game.Tournament.Screens.TeamIntro
             if (match.NewValue == null)
                 return;
 
-            const float y_flag_offset = 292;
-
-            const float y_offset = 460;
+            const float gap = 75;
 
             mainContainer.Children = new Drawable[]
             {
-                new RoundDisplay(match.NewValue)
+                new TournamentSpriteText
                 {
-                    Position = new Vector2(100, 100)
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Y = 100,
+                    Text = match.NewValue.Round.Value?.Name.Value ?? "Unknown Round",
+                    Font = OsuFont.Torus.With(size: 26)
                 },
-                new DrawableTeamFlag(match.NewValue.Team1.Value)
+                new PlayerIntro(match.NewValue.Team1.Value, TeamColour.Red)
                 {
-                    Position = new Vector2(165, y_flag_offset),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.CentreLeft,
+                    X = gap,
                 },
-                new DrawableTeamWithPlayers(match.NewValue.Team1.Value, TeamColour.Red)
+                new PlayerIntro(match.NewValue.Team2.Value, TeamColour.Blue)
                 {
-                    Position = new Vector2(165, y_offset),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.CentreRight,
+                    X = -gap,
                 },
-                new DrawableTeamFlag(match.NewValue.Team2.Value)
+                new SpriteIcon
                 {
-                    Position = new Vector2(740, y_flag_offset),
-                },
-                new DrawableTeamWithPlayers(match.NewValue.Team2.Value, TeamColour.Blue)
-                {
-                    Position = new Vector2(740, y_offset),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Icon = FontAwesome.Solid.FistRaised,
+                    Size = new Vector2(64),
                 },
             };
         }

@@ -10,6 +10,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Game.Graphics;
 using osu.Game.Tournament.Components;
 using osu.Game.Tournament.Models;
+using osu.Game.Tournament.Screens.TeamWin.Components;
 using osuTK;
 
 namespace osu.Game.Tournament.Screens.TeamWin
@@ -90,34 +91,37 @@ namespace osu.Game.Tournament.Screens.TeamWin
 
             mainContainer.Children = new Drawable[]
             {
-                new DrawableTeamFlag(match.Winner)
-                {
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    Position = new Vector2(-300, 10),
-                    Scale = new Vector2(2f)
-                },
                 new FillFlowContainer
                 {
+                    Y = 125,
                     AutoSizeAxes = Axes.Both,
                     Direction = FillDirection.Vertical,
-                    Anchor = Anchor.Centre,
-                    Origin = Anchor.Centre,
-                    X = 260,
+                    Anchor = Anchor.TopCentre,
+                    Origin = Anchor.TopCentre,
+                    Spacing = new Vector2(2),
                     Children = new Drawable[]
                     {
-                        new RoundDisplay(match)
+                        new TournamentSpriteText
                         {
-                            Margin = new MarginPadding { Bottom = 30 },
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Text = match.Round.Value?.Name.Value ?? "Unknown Round",
+                            Font = OsuFont.Torus.With(size: 36)
                         },
                         new TournamentSpriteText
                         {
-                            Text = "WINNER",
-                            Font = OsuFont.Torus.With(size: 100, weight: FontWeight.Bold),
-                            Margin = new MarginPadding { Bottom = 50 },
+                            Anchor = Anchor.TopCentre,
+                            Origin = Anchor.TopCentre,
+                            Text = "Winner",
+                            Font = OsuFont.Torus.With(size: 36)
                         },
-                        new DrawableTeamWithPlayers(match.Winner, match.WinnerColour)
                     }
+                },
+                new PlayerWin(match.Winner)
+                {
+                    Y = 25,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
                 },
             };
             mainContainer.FadeOut();

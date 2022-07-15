@@ -30,6 +30,11 @@ namespace osu.Game.Tournament.Models
         public int? Rank { get; set; }
 
         /// <summary>
+        /// The player's country rank, or null of not available.
+        /// </summary>
+        public int? CountryRank { get; set; }
+
+        /// <summary>
         /// A URL to the player's profile cover.
         /// </summary>
         public string CoverUrl { get; set; } = string.Empty;
@@ -47,7 +52,8 @@ namespace osu.Game.Tournament.Models
             user.Statistics = new UserStatistics
             {
                 User = user,
-                GlobalRank = Rank
+                GlobalRank = Rank,
+                CountryRank = CountryRank,
             };
 
             return user;
