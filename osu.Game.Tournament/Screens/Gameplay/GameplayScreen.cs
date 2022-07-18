@@ -27,8 +27,10 @@ namespace osu.Game.Tournament.Screens.Gameplay
     {
         private readonly BindableBool warmup = new BindableBool();
         private readonly BindableBool showRanks = new BindableBool();
+        private readonly BindableBool showMods = new BindableBool(true);
 
         public readonly Bindable<TourneyState> State = new Bindable<TourneyState>();
+        private OsuButton modsButton;
         private OsuButton ranksButton;
         private OsuButton warmupButton;
         private MatchIPCInfo ipc;
@@ -118,6 +120,12 @@ namespace osu.Game.Tournament.Screens.Gameplay
                             Text = "Toggle ranks",
                             Action = () => showRanks.Toggle()
                         },
+                        modsButton = new TourneyButton
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Text = "Toggle mods",
+                            Action = () => showMods.Toggle()
+                        },
                         new SettingsSlider<int>
                         {
                             LabelText = "Chroma width",
@@ -146,6 +154,12 @@ namespace osu.Game.Tournament.Screens.Gameplay
             {
                 ranksButton.Alpha = !s.NewValue ? 0.5f : 1;
                 header.ShowRanks = !s.NewValue;
+            }, true);
+
+            showMods.BindValueChanged(m =>
+            {
+                modsButton.Alpha = m.NewValue ? 1 : 0.5f;
+                NowPlayingInfo.ShowMods = m.NewValue;
             }, true);
         }
 

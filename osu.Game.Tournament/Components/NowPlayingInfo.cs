@@ -54,6 +54,23 @@ namespace osu.Game.Tournament.Components
 
         private TournamentBeatmap beatmap;
         private LegacyMods mods;
+        private FillFlowContainer modsFlow;
+        private bool showMods = true;
+
+        public bool ShowMods
+        {
+            get => showMods;
+            set
+            {
+                if (value == showMods)
+                    return;
+
+                showMods = true;
+
+                if (IsLoaded)
+                    modsFlow.FadeTo(showMods ? 1 : 0, 100);
+            }
+        }
 
         [BackgroundDependencyLoader]
         private void load()
@@ -214,8 +231,9 @@ namespace osu.Game.Tournament.Components
                                 }
                             }
                         },
-                        new FillFlowContainer
+                        modsFlow = new FillFlowContainer
                         {
+                            Alpha = showMods ? 1 : 0,
                             AutoSizeAxes = Axes.X,
                             RelativeSizeAxes = Axes.Y,
                             Direction = FillDirection.Horizontal,
@@ -234,9 +252,6 @@ namespace osu.Game.Tournament.Components
 
         private static IEnumerable<string> getModAcronyms(LegacyMods mods)
         {
-            if (mods.HasFlagFast(LegacyMods.NoFail))
-                yield return "NF";
-
             if (mods.HasFlagFast(LegacyMods.Easy))
                 yield return "EZ";
 
