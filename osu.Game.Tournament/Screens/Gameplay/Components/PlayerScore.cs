@@ -48,6 +48,23 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             }
         }
 
+        private bool showRank = true;
+
+        public bool ShowRank
+        {
+            get => showRank;
+            set
+            {
+                if (showRank == value)
+                    return;
+
+                showRank = value;
+
+                if (IsLoaded)
+                    updateDisplay();
+            }
+        }
+
         public PlayerScore(TournamentTeam team, TeamColour colour, Bindable<int?> currentTeamScore, int pointsToWin)
             : base(team)
         {
@@ -104,6 +121,8 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
                         {
                             Direction = FillDirection.Vertical,
                             AutoSizeAxes = Axes.X,
+                            AutoSizeDuration = 200,
+                            AutoSizeEasing = Easing.OutQuint,
                             RelativeSizeAxes = Axes.Y,
                             Anchor = anchor,
                             Origin = anchor,
@@ -151,7 +170,6 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             name.Font = name.Font.With(size: 24, weight: FontWeight.Bold);
             rank.Text = $"COUNTRY RANK {(User.CountryRank.HasValue ? $"#{User.CountryRank.Value:n0}" : "Unknown")}";
             rank.Font = rank.Font.With(size: 14, weight: FontWeight.Bold);
-            rank.Alpha = 0.3f;
 
             currentTeamScore.BindValueChanged(scoreChanged);
 
@@ -159,7 +177,11 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
         }
 
         private void scoreChanged(ValueChangedEvent<int?> score) => counter.Current = score.NewValue ?? 0;
-        private void updateDisplay() => counter.FadeTo(ShowScore ? 1 : 0, 200);
+        private void updateDisplay()
+        {
+            rank.FadeTo(ShowRank ? 0.3f : 0, 200);
+            counter.FadeTo(ShowScore ? 1 : 0, 200);
+        }
 
         private class PlayerScoreCounter : StarCounter
         {

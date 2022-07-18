@@ -26,8 +26,10 @@ namespace osu.Game.Tournament.Screens.Gameplay
     public class GameplayScreen : BeatmapInfoScreen
     {
         private readonly BindableBool warmup = new BindableBool();
+        private readonly BindableBool showRanks = new BindableBool();
 
         public readonly Bindable<TourneyState> State = new Bindable<TourneyState>();
+        private OsuButton ranksButton;
         private OsuButton warmupButton;
         private MatchIPCInfo ipc;
 
@@ -110,11 +112,11 @@ namespace osu.Game.Tournament.Screens.Gameplay
                             Text = "Toggle warmup",
                             Action = () => warmup.Toggle()
                         },
-                        new TourneyButton
+                        ranksButton = new TourneyButton
                         {
                             RelativeSizeAxes = Axes.X,
-                            Text = "Toggle chat",
-                            Action = () => { State.Value = State.Value == TourneyState.Idle ? TourneyState.Playing : TourneyState.Idle; }
+                            Text = "Toggle ranks",
+                            Action = () => showRanks.Toggle()
                         },
                         new SettingsSlider<int>
                         {
@@ -138,6 +140,12 @@ namespace osu.Game.Tournament.Screens.Gameplay
             {
                 warmupButton.Alpha = !w.NewValue ? 0.5f : 1;
                 header.ShowScores = !w.NewValue;
+            }, true);
+
+            showRanks.BindValueChanged(s =>
+            {
+                ranksButton.Alpha = !s.NewValue ? 0.5f : 1;
+                header.ShowRanks = !s.NewValue;
             }, true);
         }
 

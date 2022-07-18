@@ -31,6 +31,7 @@ namespace osu.Game.Tournament.Screens.MapPool
 
         private TeamColour pickColour;
         private ChoiceType pickType;
+        private MatchHeader header;
 
         private readonly OsuButton buttonRedBan;
         private readonly OsuButton buttonBlueBan;
@@ -46,7 +47,7 @@ namespace osu.Game.Tournament.Screens.MapPool
                     Loop = true,
                     RelativeSizeAxes = Axes.Both,
                 },
-                new MatchHeader(),
+                header = new MatchHeader(),
                 mapFlows = new FillFlowContainer<FillFlowContainer<TournamentBeatmapPanel>>
                 {
                     Y = 160,
@@ -103,6 +104,7 @@ namespace osu.Game.Tournament.Screens.MapPool
         [BackgroundDependencyLoader]
         private void load(MatchIPCInfo ipc)
         {
+            Schedule(() => header.ShowRanks = true);
             ipc.Beatmap.BindValueChanged(beatmapChanged);
         }
 

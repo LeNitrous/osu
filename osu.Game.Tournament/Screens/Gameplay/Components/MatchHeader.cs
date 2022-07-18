@@ -33,6 +33,23 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             }
         }
 
+        private bool showRanks = true;
+
+        public bool ShowRanks
+        {
+            get => showRanks;
+            set
+            {
+                if (value == showRanks)
+                    return;
+
+                showRanks = value;
+
+                if (IsLoaded)
+                    updateDisplay();
+            }
+        }
+
         private bool showLogo = true;
 
         public bool ShowLogo
@@ -85,6 +102,8 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
 
         private void updateDisplay()
         {
+            teamDisplay1.ShowRank = showRanks;
+            teamDisplay2.ShowRank = showRanks;
             teamDisplay1.ShowScore = showScores;
             teamDisplay2.ShowScore = showScores;
         }

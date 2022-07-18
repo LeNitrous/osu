@@ -26,6 +26,11 @@ namespace osu.Game.Tournament.Screens.Gameplay.Components
             set => playerScore.ShowScore = value;
         }
 
+        public bool ShowRank
+        {
+            set => playerScore.ShowRank = value;
+        }
+
         public PlayerScoreDisplay(TeamColour teamColour)
         {
             AutoSizeAxes = Axes.X;
