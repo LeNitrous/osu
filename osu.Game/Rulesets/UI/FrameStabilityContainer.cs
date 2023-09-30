@@ -119,21 +119,7 @@ namespace osu.Game.Rulesets.UI
 
         private void updateClock()
         {
-            if (waitingOnFrames.Value)
-            {
-                // if waiting on frames, run one update loop to determine if frames have arrived.
-                state = PlaybackState.Valid;
-            }
-            else if (IsPaused.Value)
-            {
-                // time should not advance while paused, nor should anything run.
-                state = PlaybackState.NotValid;
-                return;
-            }
-            else
-            {
-                state = PlaybackState.Valid;
-            }
+            state = PlaybackState.Valid;
 
             double proposedTime = referenceClock.CurrentTime;
 
