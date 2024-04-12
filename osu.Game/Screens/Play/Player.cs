@@ -27,6 +27,7 @@ using osu.Game.Extensions;
 using osu.Game.Graphics.Containers;
 using osu.Game.IO.Archives;
 using osu.Game.Online.API;
+using osu.Game.Online.Broadcasts;
 using osu.Game.Overlays;
 using osu.Game.Rulesets;
 using osu.Game.Rulesets.Mods;
@@ -390,6 +391,13 @@ namespace osu.Game.Screens.Play
 
             IsBreakTime.BindTo(breakTracker.IsBreakTime);
             IsBreakTime.BindValueChanged(onBreakTimeChanged, true);
+
+            AddInternal(new StateBroadcasterWithBindable<double>(BroadcastID.PLAY_HEALTH, HealthProcessor.Health));
+            AddInternal(new StateBroadcasterWithBindable<long>(BroadcastID.PLAY_SCORE, ScoreProcessor.TotalScore));
+            AddInternal(new StateBroadcasterWithBindable<double>(BroadcastID.PLAY_ACCURACY, ScoreProcessor.Accuracy));
+            AddInternal(new StateBroadcasterWithBindable<int>(BroadcastID.PLAY_COMBO, ScoreProcessor.Combo));
+            AddInternal(new PerformanceBroadcaster(GameplayState, ScoreProcessor, ruleset.CreatePerformanceCalculator()));
+            AddInternal(new PlayerClockBroadcaster(GameplayClockContainer));
 
             loadLeaderboard();
         }

@@ -17,6 +17,7 @@ using osu.Framework.Input.Events;
 using osu.Game.Configuration;
 using osu.Game.Input.Bindings;
 using osu.Game.Localisation;
+using osu.Game.Online.Broadcasts;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Notifications;
 using osu.Game.Rulesets;
@@ -206,6 +207,8 @@ namespace osu.Game.Screens.Play
 
             // start all elements hidden
             hideTargets.ForEach(d => d.Hide());
+
+            Add(new PlayerInputBroadcaster(InputCountController));
         }
 
         public override void Hide() =>

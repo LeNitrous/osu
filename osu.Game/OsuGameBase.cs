@@ -47,6 +47,7 @@ using osu.Game.IO;
 using osu.Game.Localisation;
 using osu.Game.Online;
 using osu.Game.Online.API;
+using osu.Game.Online.Broadcasts;
 using osu.Game.Online.Chat;
 using osu.Game.Online.Metadata;
 using osu.Game.Online.Multiplayer;
@@ -404,6 +405,10 @@ namespace osu.Game
 
             base.Content.Add(new TouchInputInterceptor());
             base.Content.Add(hitErrorTracker);
+
+            var broadcastServer = new StateBroadcastServer();
+            base.Content.Add(broadcastServer);
+            dependencies.CacheAs<IStateBroadcastServer>(broadcastServer);
 
             KeyBindingStore = new RealmKeyBindingStore(realm, keyCombinationProvider);
             KeyBindingStore.Register(globalBindings, RulesetStore.AvailableRulesets);

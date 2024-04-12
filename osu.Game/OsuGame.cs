@@ -45,6 +45,7 @@ using osu.Game.Input.Bindings;
 using osu.Game.IO;
 using osu.Game.Localisation;
 using osu.Game.Online;
+using osu.Game.Online.Broadcasts;
 using osu.Game.Online.Chat;
 using osu.Game.Online.Rooms;
 using osu.Game.Overlays;
@@ -991,7 +992,13 @@ namespace osu.Game
                 },
                 topMostOverlayContent = new Container { RelativeSizeAxes = Axes.Both },
                 idleTracker,
-                new ConfineMouseTracker()
+                new ConfineMouseTracker(),
+                new ModBroadcaster(SelectedMods),
+                new BeatmapBroadcaster(Beatmap),
+                new RulesetBroadcaster(Ruleset),
+                new UserInfoBroadcaster(API),
+                new UserActivityBroadcaster(API),
+                new UserStatisticsBroadcaster(API),
             });
 
             ScreenStack.ScreenPushed += screenPushed;
